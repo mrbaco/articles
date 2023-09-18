@@ -1,0 +1,403 @@
+{
+	"info": {
+		"_postman_id": "22d2e6a8-8a36-4f1c-bbf1-97fd8d60fe0b",
+		"name": "Обучающая статья по Wiremock",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17265519"
+	},
+	"item": [
+		{
+			"name": "1. Работа с заглушками",
+			"item": [
+				{
+					"name": "Отправить заглушки",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mappings\": [\r\n        {\r\n            \"request\": {\r\n                \"method\": \"GET\",\r\n                \"urlPath\": \"/api/products/\",\r\n                \"queryParameters\": {\r\n                    \"in_cart\": {\r\n                        \"equalTo\": \"10001:1,10002:3,10005:20.5\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 200,\r\n                \"headers\": {\r\n                    \"Content-Type\": \"application/json\"\r\n                },\r\n                \"jsonBody\": [\r\n                    {\r\n                        \"id\": \"10001\",\r\n                        \"name\": \"Рюкзак Erhaft Star M-2357\",\r\n                        \"stock\": 12,\r\n                        \"weight\": 15.5\r\n                    },\r\n                    {\r\n                        \"id\": \"10002\",\r\n                        \"name\": \"Пюре ФрутоНяня из говядины с овощами 100 г с 8 месяцев\",\r\n                        \"stock\": 60,\r\n                        \"weight\": 2.3\r\n                    },\r\n                    {\r\n                        \"id\": \"10005\",\r\n                        \"name\": \"Каша Fleur Alpine безмолочная гречневая гипоаллергенная 175г с 4мес\",\r\n                        \"stock\": 5.5,\r\n                        \"weight\": 1\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPath\": \"/api/orders/\",\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"products\": [\r\n                                {\r\n                                    \"id\": \"10005\",\r\n                                    \"quantity\": 20.5\r\n                                },\r\n                                {\r\n                                    \"id\": \"10002\",\r\n                                    \"quantity\": 3\r\n                                },\r\n                                {\r\n                                    \"id\": \"10001\",\r\n                                    \"quantity\": 1\r\n                                }\r\n                            ]\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 201,\r\n                \"headers\": {\r\n                    \"Content-Type\": \"application/json\"\r\n                },\r\n                \"jsonBody\": {\r\n                    \"id\": \"800000000023\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPath\": \"/api/ffo/\",\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"order_id\": \"800000000023\",\r\n                            \"products\": [\r\n                                10001,\r\n                                10002,\r\n                                10005\r\n                            ]\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 201,\r\n                \"headers\": {\r\n                    \"Content-Type\": \"application/json\"\r\n                },\r\n                \"jsonBody\": {\r\n                    \"id\": \"882\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PUT\",\r\n                \"urlPathTemplate\": \"/api/ffo/{ffo_id}/\",\r\n                \"pathParameters\": {\r\n                    \"ffo_id\": {\r\n                        \"equalTo\": \"882\"\r\n                    }\r\n                },\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"pickup_point\": \"300000048\"\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PUT\",\r\n                \"urlPathPattern\": \"/api/ffo/.*\"\r\n            },\r\n            \"response\": {\r\n                \"status\": 400,\r\n                \"headers\": {\r\n                    \"Content-Type\": \"application/json\"\r\n                },\r\n                \"jsonBody\": {\r\n                    \"error\": \"Pickup point doesn't exist!\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PATCH\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                },\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"name\": \"Екатерина\",\r\n                            \"last_name\": \"Акулова\",\r\n                            \"phone\": \"+79001234567\"\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/confirm/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"GET\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 200,\r\n                \"headers\": {\r\n                    \"Content-Type\": \"application/json\"\r\n                },\r\n                \"jsonBody\": {\r\n                    \"order_id\": \"800000000023\",\r\n                    \"ffo_id\": \"882\",\r\n                    \"payer\": {\r\n                        \"name\": \"Екатерина\",\r\n                        \"last_name\": \"Акулова\",\r\n                        \"phone\": \"+79001234567\"\r\n                    },\r\n                    \"products\": [\r\n                        {\r\n                            \"id\": \"10001\",\r\n                            \"name\": \"Рюкзак Erhaft Star M-2357\",\r\n                            \"quantity\": 1,\r\n                            \"weight\": 15.5\r\n                        },\r\n                        {\r\n                            \"id\": \"10002\",\r\n                            \"name\": \"Пюре ФрутоНяня из говядины с овощами 100 г с 8 месяцев\",\r\n                            \"quantity\": 3,\r\n                            \"weight\": 2.3\r\n                        },\r\n                        {\r\n                            \"id\": \"10005\",\r\n                            \"name\": \"Каша Fleur Alpine безмолочная гречневая гипоаллергенная 175г с 4мес\",\r\n                            \"quantity\": 20.5,\r\n                            \"weight\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{wiremock_instance}}/__admin/mappings/import",
+							"host": [
+								"{{wiremock_instance}}"
+							],
+							"path": [
+								"__admin",
+								"mappings",
+								"import"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить все заглушки",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mappings\": [\r\n        {\r\n            \"request\": {\r\n                \"method\": \"GET\",\r\n                \"urlPath\": \"/api/products/\",\r\n                \"queryParameters\": {\r\n                    \"in_cart\": {\r\n                        \"equalTo\": \"10001:1,10002:3,10005:20.5\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 200,\r\n                \"jsonBody\": [\r\n                    {\r\n                        \"id\": \"10001\",\r\n                        \"name\": \"Товар 1\",\r\n                        \"stock\": 12,\r\n                        \"weight\": 15.5\r\n                    },\r\n                    {\r\n                        \"id\": \"10002\",\r\n                        \"name\": \"Товар 2\",\r\n                        \"stock\": 60,\r\n                        \"weight\": 2.3\r\n                    },\r\n                    {\r\n                        \"id\": \"10005\",\r\n                        \"name\": \"Товар 3\",\r\n                        \"stock\": 5.5,\r\n                        \"weight\": 1\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPath\": \"/api/orders/\",\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"products\": [\r\n                                {\r\n                                    \"id\": \"10005\",\r\n                                    \"quantity\": 20.5\r\n                                },\r\n                                {\r\n                                    \"id\": \"10002\",\r\n                                    \"quantity\": 3\r\n                                },\r\n                                {\r\n                                    \"id\": \"10001\",\r\n                                    \"quantity\": 1\r\n                                }\r\n                            ]\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 201,\r\n                \"jsonBody\": {\r\n                    \"id\": \"800000000023\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPath\": \"/api/ffo/\",\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"order_id\": \"800000000023\",\r\n                            \"products\": [\r\n                                10001,\r\n                                10002,\r\n                                10005\r\n                            ]\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 201,\r\n                \"jsonBody\": {\r\n                    \"id\": \"882\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PUT\",\r\n                \"urlPathTemplate\": \"/api/ffo/{ffo_id}/\",\r\n                \"pathParameters\": {\r\n                    \"ffo_id\": {\r\n                        \"equalTo\": \"882\"\r\n                    }\r\n                },\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"pickup_point\": \"300000048\"\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PUT\",\r\n                \"urlPathPattern\": \"/api/ffo/.*\"\r\n            },\r\n            \"response\": {\r\n                \"status\": 400,\r\n                \"jsonBody\": {\r\n                    \"error\": \"Pickup point doesn't exist!\"\r\n                }\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"PATCH\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                },\r\n                \"bodyPatterns\": [\r\n                    {\r\n                        \"equalToJson\": {\r\n                            \"name\": \"Екатерина\",\r\n                            \"last_name\": \"Акулова\",\r\n                            \"phone\": \"+79001234567\"\r\n                        },\r\n                        \"ignoreArrayOrder\": true\r\n                    }\r\n                ]\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"POST\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/confirm/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 204\r\n            }\r\n        },\r\n        {\r\n            \"request\": {\r\n                \"method\": \"GET\",\r\n                \"urlPathTemplate\": \"/api/orders/{order_id}/\",\r\n                \"pathParameters\": {\r\n                    \"order_id\": {\r\n                        \"equalTo\": \"800000000023\"\r\n                    }\r\n                }\r\n            },\r\n            \"response\": {\r\n                \"status\": 200,\r\n                \"jsonBody\": {\r\n                    \"order_id\": \"800000000023\",\r\n                    \"ffo_id\": \"882\",\r\n                    \"payer\": {\r\n                        \"name\": \"Екатерина\",\r\n                        \"last_name\": \"Акулова\",\r\n                        \"phone\": \"+79001234567\"\r\n                    },\r\n                    \"products\": [\r\n                        {\r\n                            \"id\": \"10001\",\r\n                            \"name\": \"Товар 1\",\r\n                            \"quantity\": 1,\r\n                            \"weight\": 15.5\r\n                        },\r\n                        {\r\n                            \"id\": \"10002\",\r\n                            \"name\": \"Товар 2\",\r\n                            \"quantity\": 3,\r\n                            \"weight\": 2.3\r\n                        },\r\n                        {\r\n                            \"id\": \"10005\",\r\n                            \"name\": \"Товар 3\",\r\n                            \"quantity\": 20.5,\r\n                            \"weight\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{wiremock_instance}}/__admin/mappings/reset",
+							"host": [
+								"{{wiremock_instance}}"
+							],
+							"path": [
+								"__admin",
+								"mappings",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Поработать с сервисом",
+			"item": [
+				{
+					"name": "Пример 1 - Создание заказа",
+					"item": [
+						{
+							"name": "Отобразить корзину пользователя",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{wiremock_instance}}/api/products/?in_cart=10001:1,10002:3,10005:20.5",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"products",
+										""
+									],
+									"query": [
+										{
+											"key": "in_cart",
+											"value": "10001:1,10002:3,10005:20.5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создать черновик заказа",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": \"10001\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"id\": \"10002\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"id\": \"10005\",\r\n            \"quantity\": 20.5\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/orders/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создать черновик заявки на самовывоз",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"order_id\": \"800000000023\",\r\n    \"products\": [\r\n        10001,\r\n        10002,\r\n        10005\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/ffo/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"ffo",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Выбрать пункт самовывоза",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"pickup_point\": \"300000048\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/ffo/882/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"ffo",
+										"882",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновить данные по заказу",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Екатерина\",\r\n    \"last_name\": \"Акулова\",\r\n    \"phone\": \"+79001234567\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/orders/800000000023/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"800000000023",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Подтвердить оформление заказа",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{wiremock_instance}}/api/orders/800000000023/confirm/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"800000000023",
+										"confirm",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получить информацию о созданном заказе",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{wiremock_instance}}/api/orders/800000000023/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"800000000023",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Пример 2 - Ошибка при выборе пункта самовывоза",
+					"item": [
+						{
+							"name": "Отобразить корзину пользователя",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{wiremock_instance}}/api/products/?in_cart=10001:1,10002:3,10005:20.5",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"products",
+										""
+									],
+									"query": [
+										{
+											"key": "in_cart",
+											"value": "10001:1,10002:3,10005:20.5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создать черновик заказа",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": \"10001\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"id\": \"10002\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"id\": \"10005\",\r\n            \"quantity\": 20.5\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/orders/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создать черновик заявки на самовывоз",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"order_id\": \"800000000023\",\r\n    \"products\": [\r\n        10001,\r\n        10002,\r\n        10005\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/ffo/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"ffo",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Выбрать пункт самовывоза",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"pickup_point\": \"300000095\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{wiremock_instance}}/api/ffo/882/",
+									"host": [
+										"{{wiremock_instance}}"
+									],
+									"path": [
+										"api",
+										"ffo",
+										"882",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "wiremock_instance",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
