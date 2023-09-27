@@ -588,8 +588,8 @@ docker run -it --rm -p 8080:8080 --name wiremock wiremock/wiremock:3.1.0 --async
                     "Content-Type": "application/json"
                 },
                 "jsonBody": {
-					"test1": true
-				}
+                    "test1": true
+                }
             }
         },
         {
@@ -603,8 +603,8 @@ docker run -it --rm -p 8080:8080 --name wiremock wiremock/wiremock:3.1.0 --async
                     "Content-Type": "application/json"
                 },
                 "jsonBody": {
-					"test2": true
-				}
+                    "test2": true
+                }
             }
         },
         {
@@ -618,8 +618,8 @@ docker run -it --rm -p 8080:8080 --name wiremock wiremock/wiremock:3.1.0 --async
                     "Content-Type": "application/json"
                 },
                 "jsonBody": {
-					"test3": true
-				}
+                    "test3": true
+                }
             }
         }
     ]
@@ -716,22 +716,22 @@ http {
 
     server {
         listen 80;
-		
-		location = /__admin/mappings/import {
-			mirror /wiremock1;
-			mirror /wiremock2;
-			proxy_pass http://wiremock3:8080$request_uri;
-		}
-		
-		location = /wiremock1 {
-			internal;
-			proxy_pass http://wiremock1:8080/__admin/mappings/import;
-		}
-		
-		location = /wiremock2 {
-			internal;
-			proxy_pass http://wiremock2:8080/__admin/mappings/import;
-		}
+        
+        location = /__admin/mappings/import {
+            mirror /wiremock1;
+            mirror /wiremock2;
+            proxy_pass http://wiremock3:8080$request_uri;
+        }
+        
+        location = /wiremock1 {
+            internal;
+            proxy_pass http://wiremock1:8080/__admin/mappings/import;
+        }
+        
+        location = /wiremock2 {
+            internal;
+            proxy_pass http://wiremock2:8080/__admin/mappings/import;
+        }
 
         location / {
             proxy_pass http://wiremock;
