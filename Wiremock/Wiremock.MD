@@ -720,7 +720,7 @@ http {
         location = /__admin/mappings/import {
             mirror /wiremock1;
             mirror /wiremock2;
-            proxy_pass http://wiremock3:8080$request_uri;
+            proxy_pass http://wiremock3:8080/__admin/mappings/import;
         }
         
         location = /wiremock1 {
