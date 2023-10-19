@@ -69,7 +69,8 @@ docker run -it --rm -p 8080:8080 --name wiremock wiremock/wiremock:3.1.0
 
 Для создания заглушки отправим POST-запрос на адрес `http://localhost:8080/__admin/mappings`, в качестве тела передадим 
 JSON-объект с описанием заглушки:
-`curl http://localhost:8080/__admin/mappings --data "{
+```
+curl http://localhost:8080/__admin/mappings --data "{
     \"request\": {
         \"method\": \"GET\",
         \"urlPath\": \"/hello\"
@@ -78,10 +79,13 @@ JSON-объект с описанием заглушки:
         \"status\": 200,
         \"body\": \"Hello World!\"
     }
-}"`
+}"
+```
 
 Для вызова созданной заглушки отправим GET-запрос на адрес `http://localhost:8080/hello`:
-`curl http://localhost:8080/hello`
+```
+curl http://localhost:8080/hello
+```
 
 Если всё сделано правильно, то в ответе на последней запрос в выводе появится надпись `Hello World!`.
 
