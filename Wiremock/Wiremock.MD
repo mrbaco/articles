@@ -95,7 +95,9 @@ curl http://localhost:8080/hello
 их инициализации: Wiremock может подхватить их из директории, которая указывается при монтировании образа.
 
 В качестве примера запуска Wiremock для работы с заглушками из директории может быть использована следующая команда:
-`docker run -it --rm -p 8080:8080 -v /c/wiremock:/home/wiremock --name wiremock wiremock/wiremock:3.1.0`
+```
+docker run -it --rm -p 8080:8080 -v /c/wiremock:/home/wiremock --name wiremock wiremock/wiremock:3.1.0
+```
 
 В данной команде передаётся путь к директории `C:/wiremock`. Внутри этой директории по пути `C:/wiremock/mappings` 
 заранее располагаются файлы заглушек в JSON-формате.
